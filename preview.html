@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOMP - Premium Sports App Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0d0d12;
+            --surface-primary: #1e1e26;
+            --surface-secondary: #2d2d37;
+            --border: #404050;
+            --accent: #ff5600;
+            --accent-light: #ff8033;
+            --text-primary: #ffffff;
+            --text-secondary: #bfbfc8;
+            --text-tertiary: #8d8d99;
+            --success: #33cc66;
+            --failure: #f24040;
+            --warning: #ffa500;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg) 0%, #0a0a0f 100%);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scroll-content {
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .tab-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 80px;
+            background-color: var(--surface-primary);
+            border-top: 1px solid var(--border);
+            padding: 8px 0;
+        }
+
+        .tab-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            transition: color 0.2s;
+            padding: 8px;
+        }
+
+        .tab-item.active {
+            color: var(--accent);
+        }
+
+        .tab-icon { font-size: 18px; }
+        .tab-label { font-size: 11px; font-weight: 600; }
+
+        .display-large { font-size: 72px; font-weight: 700; line-height: 1.1; letter-spacing: -2px; }
+        .display-medium { font-size: 56px; font-weight: 700; }
+        .heading-large { font-size: 32px; font-weight: 700; }
+        .heading-small { font-size: 20px; font-weight: 600; }
+        .body-large { font-size: 18px; }
+        .body-medium { font-size: 16px; }
+        .body-small { font-size: 14px; }
+        .caption-large { font-size: 13px; font-weight: 600; letter-spacing: 1px; }
+
+        .stomp-surface {
+            background-color: var(--surface-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .stomp-glass-surface {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .stomp-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 1px;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .stomp-button:hover {
+            background-color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-top: 24px;
+        }
+
+        .stomp-title {
+            font-size: 72px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .stomp-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        .ritual-section {
+            margin-bottom: 24px;
+        }
+
+        .label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .sport-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .sport-button {
+            padding: 12px;
+            background-color: var(--surface-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .sport-button:hover {
+            border-color: var(--accent);
+        }
+
+        .sport-button.active {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .tricks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .trick-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background-color: var(--surface-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .trick-button:hover {
+            background-color: var(--surface-secondary);
+            border-color: var(--accent);
+        }
+
+        .trick-button.active {
+            background-color: var(--surface-secondary);
+            border-color: var(--accent);
+            border-width: 2px;
+        }
+
+        .trick-info {
+            text-align: left;
+        }
+
+        .trick-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .trick-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .checkmark {
+            font-size: 20px;
+            color: var(--accent);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            background-color: var(--surface-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Lock In Screen */
+        .lock-in-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #020203;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 24px;
+        }
+
+        .lock-in-screen.hidden {
+            display: none;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .lock-in-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: 48px;
+        }
+
+        .lock-in-text-section {
+            text-align: center;
+        }
+
+        .sport-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .trick-title {
+            font-size: 72px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+
+        .cue-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+
+        .hold-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            background: conic-gradient(var(--accent) 0deg, var(--accent) calc(var(--progress, 0) * 360deg), var(--surface-secondary) calc(var(--progress, 0) * 360deg), var(--surface-secondary) 360deg);
+            border-radius: 50%;
+            transition: all 0.05s;
+        }
+
+        .hold-text {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .hold-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .hold-action {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .hold-instruction {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            text-align: center;
+        }
+
+        .outcome-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            gap: 24px;
+        }
+
+        .outcome-header {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .outcome-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .outcome-button {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background-color: var(--surface-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+        }
+
+        .outcome-button:hover {
+            background-color: var(--surface-secondary);
+            border-color: var(--accent);
+        }
+
+        .outcome-button.active {
+            background-color: var(--surface-secondary);
+            border-color: var(--accent);
+            border-width: 2px;
+        }
+
+        .outcome-emoji {
+            font-size: 20px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .outcome-check {
+            margin-left: auto;
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        /* Hidden content */
+        [data-tab] { display: none; }
+        [data-tab].active { display: block; }
+
+        .trick-card {
+            background-color: var(--surface-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .trick-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .trick-category {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .trick-divider {
+            height: 1px;
+            background-color: var(--border);
+            opacity: 0.5;
+            margin: 12px 0;
+        }
+
+        .trick-details {
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .detail-row {
+            margin-bottom: 8px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .search-box {
+            background-color: var(--surface-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .chip {
+            padding: 6px 16px;
+            background-color: var(--surface-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            border-color: var(--accent);
+        }
+
+        .chip.active {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            background-color: var(--surface-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 44px;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 4px;
+        }
+
+        .metric-subtitle {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .streak-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .streak-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 20px 16px;
+            text-align: center;
+            background-color: var(--surface-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .streak-icon {
+            font-size: 24px;
+        }
+
+        .streak-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .streak-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 48px 24px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .empty-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            margin-top: 24px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="content-area">
+            <!-- Ritual Tab -->
+            <div data-tab="ritual" class="active">
+                <div class="scroll-content">
+                    <div class="section-header">
+                        <div class="stomp-title">STOMP</div>
+                        <div class="stomp-subtitle">Lock in before you go</div>
+                    </div>
+
+                    <div class="ritual-section">
+                        <div class="label">Select Sport</div>
+                        <div class="sport-grid" id="sportGrid"></div>
+                    </div>
+
+                    <div class="ritual-section">
+                        <div class="label">Select Trick / Focus</div>
+                        <div class="tricks-list" id="tricksList"></div>
+                    </div>
+
+                    <button class="stomp-button" onclick="startSession()">START SESSION</button>
+                </div>
+            </div>
+
+            <!-- Session Tab -->
+            <div data-tab="session">
+                <div class="scroll-content">
+                    <div class="section-header">
+                        <div class="label">Session</div>
+                        <h2 class="heading-large">No Active Session</h2>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-icon">🎯</div>
+                        <div class="empty-title">No active session</div>
+                        <div class="empty-subtitle">Start a session from Ritual tab</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Tab -->
+            <div data-tab="progress">
+                <div class="scroll-content">
+                    <div class="section-header">
+                        <div class="label">Performance</div>
+                        <h2 class="heading-large">Your Progress</h2>
+                    </div>
+
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <div class="metric-label">Commitment Rate</div>
+                            <div class="metric-value" style="color: var(--accent);">0%</div>
+                            <div class="metric-subtitle">Reps where you locked in</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Success Rate</div>
+                            <div class="metric-value" style="color: var(--success);">0%</div>
+                            <div class="metric-subtitle">Reps sent successfully</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Consistency Score</div>
+                            <div class="metric-value" style="color: var(--accent-light);">0</div>
+                            <div class="metric-subtitle">Commitment + Success</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 32px;">
+                        <div class="label">Streaks</div>
+                        <div class="streak-row">
+                            <div class="streak-card">
+                                <div class="streak-icon">🔥</div>
+                                <div class="streak-label">Commit Streak</div>
+                                <div class="streak-value">0</div>
+                            </div>
+                            <div class="streak-card">
+                                <div class="streak-icon">✓</div>
+                                <div class="streak-label">Success Streak</div>
+                                <div class="streak-value">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Library Tab -->
+            <div data-tab="library">
+                <div class="scroll-content">
+                    <div class="section-header">
+                        <div class="label">Trick Library</div>
+                        <h2 class="heading-large">Learn Your Skills</h2>
+                    </div>
+
+                    <div class="search-box">
+                        <input type="text" class="search-input" placeholder="Search tricks..." id="trickSearch">
+                    </div>
+
+                    <div style="margin-bottom: 24px;">
+                        <div class="label">Sport</div>
+                        <div class="filter-chips" id="sportFilter"></div>
+                    </div>
+
+                    <div id="libraryContent"></div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div data-tab="settings">
+                <div class="scroll-content">
+                    <div class="section-header">
+                        <div class="label">Settings</div>
+                        <h2 class="heading-large">Customize Your Experience</h2>
+                    </div>
+
+                    <div class="ritual-section">
+                        <div class="label">Premium</div>
+                        <div class="stomp-surface">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                                <span>Premium Status</span>
+                                <span>Free</span>
+                            </div>
+                            <button class="stomp-button">UPGRADE TO PREMIUM</button>
+                        </div>
+                    </div>
+
+                    <div class="ritual-section">
+                        <div class="label">App</div>
+                        <div class="stomp-surface">
+                            <div style="display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 12px;">
+                                <span>Theme</span>
+                                <span>Dark Mode</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Haptics</span>
+                                <span>Enabled</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+            <button class="tab-item active" onclick="switchTab('ritual')">
+                <div class="tab-icon">🔥</div>
+                <div class="tab-label">Ritual</div>
+            </button>
+            <button class="tab-item" onclick="switchTab('session')">
+                <div class="tab-icon">🎯</div>
+                <div class="tab-label">Session</div>
+            </button>
+            <button class="tab-item" onclick="switchTab('progress')">
+                <div class="tab-icon">📈</div>
+                <div class="tab-label">Progress</div>
+            </button>
+            <button class="tab-item" onclick="switchTab('library')">
+                <div class="tab-icon">📚</div>
+                <div class="tab-label">Library</div>
+            </button>
+            <button class="tab-item" onclick="switchTab('settings')">
+                <div class="tab-icon">⚙️</div>
+                <div class="tab-label">Settings</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Lock In Screen -->
+    <div id="lockInScreen" class="lock-in-screen hidden">
+        <button class="close-button" onclick="closeLockIn()">✕</button>
+        <div id="lockInContent"></div>
+    </div>
+
+    <script>
+        const sports = ['Freeski Park', 'Freeski Pipe', 'Freeski Big Air', 'Moguls', 'Aerials', 'Ski Racing', 'BMX', 'Trampoline'];
+
+        const tricks = {
+            'Freeski Park': ['180', '360', '540', 'Cork 7', 'Backflip', 'Double Flip'],
+            'Freeski Pipe': ['Air to Fakie', '540 Air', 'Invert', 'McTwist'],
+            'Freeski Big Air': ['Switch 7', 'Double Cork', '1080 Grab', 'Backflip 540'],
+            'Moguls': ['Mogul Rhythm', 'Mogul Air', 'Zipper Line'],
+            'Aerials': ['Back Tuck', 'Back Full', 'Barani', 'Double Back'],
+            'Ski Racing': ['Gate Entry', 'GS Line', 'Rhythm Gate Set'],
+            'BMX': ['360', 'Tailwhip', '360 Tailwhip', 'Flair'],
+            'Trampoline': ['Back Tuck', 'Back Full', 'Double Back'],
+        };
+
+        const trickLibrary = [
+            { name: 'Cork 7', sport: 'Freeski Park', category: 'Inverted', description: 'Flip into 180 rotation', cue: 'Drive knees up, spot the cork', failure: 'Weak launch, poor flip entry', block: 'Fear of inversion' },
+            { name: '360', sport: 'Freeski Park', category: 'Spins', description: 'Full rotation in air', cue: 'Pop hard, commit rotation early', failure: 'Under-rotation, backing out', block: 'Fear of overspin' },
+            { name: 'Backflip', sport: 'Freeski Park', category: 'Inverted', description: 'Full rotation backwards', cue: 'Pop straight up, tuck knees', failure: 'Under-rotation, late flip', block: 'Loss of reference' },
+            { name: 'BMX 360', sport: 'BMX', category: 'Spins', description: 'Full rotation on the bike', cue: 'Pop and commit rotation', failure: 'Under-rotation, bailing', block: 'Spin commitment' },
+            { name: 'Tailwhip', sport: 'BMX', category: 'Tricks', description: 'Whip frame under feet, catch', cue: 'Quick whip and catch', failure: 'Losing bike position', block: 'Timing precision' },
+            { name: 'Back Tuck', sport: 'Aerials', category: 'Inverted', description: 'Backward flip with tight body', cue: 'Tight tuck from takeoff', failure: 'Opening up too early', block: 'Inversion fear' },
+            { name: 'Gate Entry', sport: 'Ski Racing', category: 'Technique', description: 'Clean approach and turn', cue: 'Early pressure, trust the edge', failure: 'Late pressure, defensive', block: 'Line commitment' },
+            { name: 'Mogul Rhythm', sport: 'Moguls', category: 'Line Work', description: 'Consistent absorption', cue: 'Attack each bump, stay centered', failure: 'Defensive line, tight rhythm', block: 'Trust the rhythm' },
+        ];
+
+        let selectedSport = 'Freeski Park';
+        let selectedTrick = 'Cork 7';
+        let holdProgress = 0;
+        let isHolding = false;
+        let holdStartTime = 0;
+
+        function initSports() {
+            const grid = document.getElementById('sportGrid');
+            grid.innerHTML = sports.map(s => `<button class="sport-button ${s === selectedSport ? 'active' : ''}" onclick="selectSport('${s}')">${s}</button>`).join('');
+        }
+
+        function initTricks() {
+            const list = document.getElementById('tricksList');
+            list.innerHTML = tricks[selectedSport].map(t => `<button class="trick-button ${t === selectedTrick ? 'active' : ''}" onclick="selectTrick('${t}')"><div class="trick-info"><div class="trick-name">${t}</div><div class="trick-desc">Advanced technique</div></div>${t === selectedTrick ? '<div class="checkmark">✓</div>' : ''}</button>`).join('');
+        }
+
+        function selectSport(sport) {
+            selectedSport = sport;
+            selectedTrick = tricks[sport][0];
+            initSports();
+            initTricks();
+        }
+
+        function selectTrick(trick) {
+            selectedTrick = trick;
+            initTricks();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('[data-tab]').forEach(el => el.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            document.querySelectorAll('.tab-item').forEach((el, i) => {
+                el.classList.toggle('active', el === event.target.closest('.tab-item'));
+            });
+
+            // Reload library on switch
+            if (tab === 'library') initLibrary();
+        }
+
+        function startSession() {
+            showLockIn();
+        }
+
+        function showLockIn() {
+            const screen = document.getElementById('lockInScreen');
+            screen.classList.remove('hidden');
+            screen.innerHTML = `
+                <button class="close-button" onclick="closeLockIn()">✕</button>
+                <div id="lockInContent"></div>
+            `;
+
+            showHoldScreen();
+        }
+
+        function showHoldScreen() {
+            const content = document.getElementById('lockInContent');
+            content.innerHTML = `
+                <div class="lock-in-content">
+                    <div class="lock-in-text-section">
+                        <div class="sport-label">${selectedSport}</div>
+                        <div class="trick-title">${selectedTrick}</div>
+                        <div class="cue-text">No backing off.</div>
+                    </div>
+                    <div>
+                        <div class="hold-circle" id="holdCircle" onmousedown="startHold()" onmouseup="stopHold()" onmouseleave="stopHold()">
+                            <div class="hold-text">
+                                <div class="hold-label">HOLD</div>
+                                <div class="hold-action">LOCK IN</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hold-instruction">Hold for 2 seconds</div>
+                </div>
+            `;
+        }
+
+        function startHold() {
+            isHolding = true;
+            holdStartTime = Date.now();
+            animateHold();
+        }
+
+        function stopHold() {
+            isHolding = false;
+            if (holdProgress < 1) {
+                holdProgress = 0;
+                updateHoldCircle();
+            }
+        }
+
+        function animateHold() {
+            if (!isHolding) return;
+
+            const elapsed = Date.now() - holdStartTime;
+            holdProgress = Math.min(elapsed / 2000, 1);
+            updateHoldCircle();
+
+            if (holdProgress < 1) {
+                requestAnimationFrame(animateHold);
+            } else {
+                showOutcomeScreen();
+            }
+        }
+
+        function updateHoldCircle() {
+            const circle = document.getElementById('holdCircle');
+            if (circle) {
+                circle.style.setProperty('--progress', holdProgress);
+            }
+        }
+
+        function showOutcomeScreen() {
+            const content = document.getElementById('lockInContent');
+            content.innerHTML = `
+                <div class="outcome-content">
+                    <div class="outcome-header">What happened?</div>
+                    <div class="outcome-buttons">
+                        <button class="outcome-button" onclick="selectOutcome('success')"><div class="outcome-emoji" style="color: var(--success);">✓</div> Sent</button>
+                        <button class="outcome-button" onclick="selectOutcome('partial')"><div class="outcome-emoji" style="color: var(--warning);">~</div> Partial</button>
+                        <button class="outcome-button" onclick="selectOutcome('miss')"><div class="outcome-emoji" style="color: var(--text-secondary);">–</div> Missed</button>
+                        <button class="outcome-button" onclick="selectOutcome('bail')"><div class="outcome-emoji" style="color: var(--failure);">✗</div> Bailed</button>
+                        <button class="outcome-button" onclick="selectOutcome('fail')"><div class="outcome-emoji" style="color: var(--failure);">!</div> Failed</button>
+                    </div>
+                    <button class="stomp-button" onclick="closeLockIn()">CONTINUE</button>
+                </div>
+            `;
+        }
+
+        function selectOutcome(outcome) {
+            alert(`Rep logged: ${outcome.toUpperCase()}\n\nIn the real app, this would be saved to your session history!`);
+        }
+
+        function closeLockIn() {
+            document.getElementById('lockInScreen').classList.add('hidden');
+            holdProgress = 0;
+        }
+
+        function initLibrary() {
+            const content = document.getElementById('libraryContent');
+            const sports = [...new Set(trickLibrary.map(t => t.sport))].sort();
+
+            const filterHtml = sports.map(s => `<button class="chip" onclick="filterBySport('${s}')">${s}</button>`).join('');
+            document.getElementById('sportFilter').innerHTML = filterHtml;
+
+            const tricksHtml = trickLibrary.map(t => `
+                <div class="trick-card">
+                    <div class="trick-header">
+                        <div><div class="trick-name">${t.name}</div><div class="trick-desc">${t.description}</div></div>
+                        <div><div class="trick-category">${t.category}</div></div>
+                    </div>
+                    <div class="trick-divider"></div>
+                    <div class="trick-details">
+                        <div class="detail-row"><strong>Cue:</strong> ${t.cue}</div>
+                        <div class="detail-row"><strong>Failure:</strong> ${t.failure}</div>
+                        <div class="detail-row"><strong>Block:</strong> ${t.block}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            content.innerHTML = tricksHtml;
+        }
+
+        function filterBySport(sport) {
+            // Just show all for now
+        }
+
+        // Initialize on load
+        initSports();
+        initTricks();
+    </script>
+</body>
+</html>
