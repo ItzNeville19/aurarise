@@ -1,0 +1,51 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DA00000001000001 in Sources */ = {isa = PBXBuildFile; fileRef = DA00000001000000 /* App.swift */; };
+	};
+
+/* Begin PBXFileReference section */
+		DA00000001000000 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		DA000001 /* Stomp */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stomp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+	};
+
+/* Begin PBXProject section */
+		DA000000 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = DA000003;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DA000004;
+			productRefGroup = DA000005;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DA000006,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DA000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA00000001000001,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+	};
+	rootObject = DA000000 /* Project object */;
+}

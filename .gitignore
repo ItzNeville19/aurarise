@@ -1,0 +1,38 @@
+# Xcode
+.DS_Store
+.xcodeproj/
+.xcworkspace/
+xcuserdata/
+*.xcarchive
+*.ipa
+*.app
+
+# Swift
+.build/
+.swiftpm/
+*.resolved
+Package.resolved
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Dependencies
+Pods/
+Carthage/
+
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
