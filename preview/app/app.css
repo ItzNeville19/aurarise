@@ -1,0 +1,88 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg);
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-bar {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-primary);
+  border-top: 1px solid var(--border);
+  padding: 0;
+}
+
+.tab-divider {
+  height: 1px;
+  background-color: var(--border);
+}
+
+.tabs-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 80px;
+  padding: 8px 0;
+  gap: 0;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-tertiary);
+  padding: 8px;
+}
+
+.tab-item.active {
+  color: var(--accent);
+}
+
+.tab-item:hover {
+  opacity: 0.8;
+}
+
+.tab-icon {
+  font-size: 18px;
+}
+
+.tab-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Content scrolling */
+.scroll-content {
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.scroll-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-content::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}

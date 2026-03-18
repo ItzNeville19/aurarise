@@ -1,0 +1,66 @@
+.session-tab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.section-header {
+  padding-top: 24px;
+  margin-bottom: 32px;
+}
+
+.section-header .label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.section-header .heading-large {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 48px;
+}
+
+.empty-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.empty-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.info-card {
+  margin-top: 24px;
+}
+
+.info-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.info-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
